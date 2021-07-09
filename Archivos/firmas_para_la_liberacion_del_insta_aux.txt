@@ -1,0 +1,3 @@
+Charly;1
+Delfi;1
+Manu;0

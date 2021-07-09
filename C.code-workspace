@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdio.h": "c",
+			"vectores.h": "c",
+			"stdbool.h": "c",
+			"osos_contra_reloj.h": "c",
+			"test_de_personalidad.h": "c",
+			"stdlib.h": "c",
+			"time.h": "c",
+			"utiles.h": "c"
+		}
+	}
+}
