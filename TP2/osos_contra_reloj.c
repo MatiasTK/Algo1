@@ -59,88 +59,88 @@ const double CHOCAR_PIEDRA = 2.0;
 
 const int HERRAMIENTA_APAGADA = -1;
 /*
-* PRE: terreno debe estar inicializado
-* POST: Inicializa los obstaculos en la matriz con su tipo,visibilidad y posicion
+* PRE: cantidad_obstaculos y maximo_obstaculo deben estar inicializados, elemento_del_mapa_t debe ser un struct valido
+* POST: Inicializa los obstaculos en el mapa con su tipo,visibilidad y posicion
 */
-void inicializar_obstaculos(juego_t* juego,int maximo_obstaculo,char tipo_obstaculo,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    int cantidad_inicializada = juego->cantidad_obstaculos;
+void inicializar_obstaculos(int* cantidad_obstaculos,elemento_del_mapa_t obstaculos[MAX_OBSTACULOS],int maximo_obstaculo,char tipo_obstaculo,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+    int cantidad_inicializada = (*cantidad_obstaculos);
 
-    while(juego->cantidad_obstaculos < (maximo_obstaculo + cantidad_inicializada)){
-        coordenada_t aux;
-        aux.fil = rand() % MAX_TERRENO_FILA;
-        aux.col = rand() % MAX_TERRENO_COLUMNA;
-       if(terreno[aux.fil][aux.col] == VACIO){
-            juego->obstaculos[juego->cantidad_obstaculos].tipo = tipo_obstaculo;
-            juego->obstaculos[juego->cantidad_obstaculos].visible = false;
-            juego->obstaculos[juego->cantidad_obstaculos].posicion.fil = aux.fil;
-            juego->obstaculos[juego->cantidad_obstaculos].posicion.col = aux.col;
-            terreno[aux.fil][aux.col] = tipo_obstaculo;
-            juego->cantidad_obstaculos++;
-        }
-    }
-}
-/*
-* PRE: terreno debe estar inicializado
-* POST: Inicializa las herramientas en la matriz con su tipo,visibilidad y posicion
-*/
-void inicializar_herramientas(juego_t* juego,int maximo_herramienta,char tipo_herramienta,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    int cantidad_inicializada = juego->cantidad_herramientas;
-    
-    while(juego->cantidad_herramientas < (maximo_herramienta + cantidad_inicializada)){
+    while((*cantidad_obstaculos) < (maximo_obstaculo + cantidad_inicializada)){
         coordenada_t aux;
         aux.fil = rand() % MAX_TERRENO_FILA;
         aux.col = rand() % MAX_TERRENO_COLUMNA;
         if(terreno[aux.fil][aux.col] == VACIO){
-            juego->herramientas[juego->cantidad_herramientas].tipo = tipo_herramienta;
-            juego->herramientas[juego->cantidad_herramientas].visible = false;
-            juego->herramientas[juego->cantidad_herramientas].posicion.fil = aux.fil;
-            juego->herramientas[juego->cantidad_herramientas].posicion.col = aux.col;
-            terreno[aux.fil][aux.col] = tipo_herramienta;
-            juego->cantidad_herramientas++;
+            obstaculos[(*cantidad_obstaculos)].tipo = tipo_obstaculo;
+            obstaculos[(*cantidad_obstaculos)].visible = false;
+            obstaculos[(*cantidad_obstaculos)].posicion.fil = aux.fil;
+            obstaculos[(*cantidad_obstaculos)].posicion.col = aux.col;
+            terreno[aux.fil][aux.col] = tipo_obstaculo;
+            (*cantidad_obstaculos)++;
         }
     }
 }
 /*
-* PRE:
+* PRE: cantidad_herramientas y maximo_herramienta deben estar inicializados, elemento_del_mapa_t debe ser un struct valido
+* POST: Inicializa las herramientas en el mapa con su tipo,visibilidad y posicion
+*/
+void inicializar_herramientas(int* cantidad_herramientas,elemento_del_mapa_t herramientas[MAX_HERRAMIENTAS],int maximo_herramienta,char tipo_herramienta,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+    int cantidad_inicializada = (*cantidad_herramientas);
+    
+    while((*cantidad_herramientas) < (maximo_herramienta + cantidad_inicializada)){
+        coordenada_t aux;
+        aux.fil = rand() % MAX_TERRENO_FILA;
+        aux.col = rand() % MAX_TERRENO_COLUMNA;
+        if(terreno[aux.fil][aux.col] == VACIO){
+            herramientas[(*cantidad_herramientas)].tipo = tipo_herramienta;
+            herramientas[(*cantidad_herramientas)].visible = false;
+            herramientas[(*cantidad_herramientas)].posicion.fil = aux.fil;
+            herramientas[(*cantidad_herramientas)].posicion.col = aux.col;
+            terreno[aux.fil][aux.col] = tipo_herramienta;
+            (*cantidad_herramientas)++;
+        }
+    }
+}
+/*
+* PRE: tipo_herramienta debe ser una herramienta valida, personaje_t debe ser un struct valido
 * POST: Inicializa los elementos en la mochila dependiendo del tipo de personaje inicial
 */
-void inicializar_mochila(juego_t* juego,char tipo_herramienta){
+void inicializar_mochila(personaje_t* personaje,char tipo_herramienta){
     int movimientos_iniciales = 0;
     int cantidades_iniciales = 0;
-    int cantidad_elementos_actual = juego->personaje.cantidad_elementos;
+    int cantidad_elementos_actual = personaje->cantidad_elementos;
 
     if(tipo_herramienta == LINTERNA){
         cantidades_iniciales = CANTIDAD_LINTERNA_INICIAL;
-        if(juego->personaje.tipo == PARDO_OSO){
+        if(personaje->tipo == PARDO_OSO){
             movimientos_iniciales = MOVIMIENTOS_LINTERNA_INICIAL + 5;
         }else{
             movimientos_iniciales = MOVIMIENTOS_LINTERNA_INICIAL;
         }
     }else if(tipo_herramienta == VELA){
         movimientos_iniciales = MOVIMIENTOS_VELA_INICIAL;
-        if(juego->personaje.tipo == POLAR_OSO){
+        if(personaje->tipo == POLAR_OSO){
             cantidades_iniciales = CANTIDAD_VELA_INICIAL + 2;
         }else{
             cantidades_iniciales = CANTIDAD_VELA_INICIAL;
         }
     }else if(tipo_herramienta == BENGALA){
         movimientos_iniciales = MOVIMIENTOS_BENGALA_INICIAL;
-        if(juego->personaje.tipo == PANDA_OSO){
+        if(personaje->tipo == PANDA_OSO){
             cantidades_iniciales = CANTIDAD_BENGALA_INICIAL + 2;
         }else{
             cantidades_iniciales = CANTIDAD_BENGALA_INICIAL;
         }
     }
 
-    while(juego->personaje.cantidad_elementos < (cantidades_iniciales + cantidad_elementos_actual)){
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].tipo = tipo_herramienta;
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].movimientos_restantes = movimientos_iniciales;
-        juego->personaje.cantidad_elementos++;
+    while(personaje->cantidad_elementos < (cantidades_iniciales + cantidad_elementos_actual)){
+        personaje->mochila[personaje->cantidad_elementos].tipo = tipo_herramienta;
+        personaje->mochila[personaje->cantidad_elementos].movimientos_restantes = movimientos_iniciales;
+        personaje->cantidad_elementos++;
     }
 
 }
 /*
-* PRE:
+* PRE: Recibe un juego con su estructura valida
 * POST: Inicializa el juego cargando toda la informacion inicial y los datos del personaje
 */
 void inicializar_juego(juego_t* juego , char tipo_personaje){
@@ -177,28 +177,27 @@ void inicializar_juego(juego_t* juego , char tipo_personaje){
         }
     }
 
-    inicializar_obstaculos(juego,MAX_ARBOLES,ARBOL,terreno);
-    inicializar_obstaculos(juego,MAX_PIEDRAS,PIEDRA,terreno);
-    inicializar_obstaculos(juego,1,KOALA,terreno);
+    inicializar_obstaculos(&(juego->cantidad_obstaculos),juego->obstaculos,MAX_ARBOLES,ARBOL,terreno);
+    inicializar_obstaculos(&(juego->cantidad_obstaculos),juego->obstaculos,MAX_PIEDRAS,PIEDRA,terreno);
+    inicializar_obstaculos(&(juego->cantidad_obstaculos),juego->obstaculos,1,KOALA,terreno);
 
-    inicializar_herramientas(juego,MAX_PILAS,PILA,terreno);
-    inicializar_herramientas(juego,MAX_VELAS,VELA,terreno);
-    inicializar_herramientas(juego,MAX_BENGALAS,BENGALA,terreno);
+    inicializar_herramientas(&(juego->cantidad_herramientas),juego->herramientas,MAX_PILAS,PILA,terreno);
+    inicializar_herramientas(&(juego->cantidad_herramientas),juego->herramientas,MAX_VELAS,VELA,terreno);
+    inicializar_herramientas(&(juego->cantidad_herramientas),juego->herramientas,MAX_BENGALAS,BENGALA,terreno);
 
-    inicializar_mochila(juego,LINTERNA);
-    inicializar_mochila(juego,VELA);
-    inicializar_mochila(juego,BENGALA);
-   
+    inicializar_mochila(&(juego->personaje),LINTERNA);
+    inicializar_mochila(&(juego->personaje),VELA);
+    inicializar_mochila(&(juego->personaje),BENGALA);
 }   
 /*
-* PRE:
+* PRE: Jugada debe estar inicializado
 * POST: Devuelve true si la jugada realizada es valida sino devuelve false
 */
 bool es_jugada_valida(char jugada){
     return(jugada == ARRIBA || jugada == ABAJO || jugada == IZQUIERDA || jugada == DERECHA || jugada == LINTERNA || jugada == VELA || jugada == BENGALA || jugada == VER_TIEMPO);
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras validas
 * POST: Devuelve -1 si el personaje encontro a chloe y el estado es terminado y 0 si el personaje no encontro a chloe y el estado es jugando
 */
 int estado_juego(juego_t juego){
@@ -209,7 +208,7 @@ int estado_juego(juego_t juego){
     }
 }
 /*
-* PRE:
+* PRE: Recibe un juego con su estructura valida
 * POST: Recrea la matriz para utilizarla en realizar jugada
 */
 void recrear_matriz(juego_t* juego, char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
@@ -228,211 +227,209 @@ void recrear_matriz(juego_t* juego, char terreno[MAX_TERRENO_FILA][MAX_TERRENO_C
     for(int i = 0; i < juego->cantidad_herramientas; i++){
         terreno[juego->herramientas[i].posicion.fil][juego->herramientas[i].posicion.col] = juego->herramientas[i].tipo;
     }
-   
     terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col] = juego->personaje.tipo;
-    
 }
 /*
-* PRE:
-* POST: Añade una herramienta a la mochila con sus respectivos tipos y movimientos restantes
+* PRE: herramienta debe ser una herramienta valida, personaje_t debe ser un struct valido
+* POST: Añade una herramienta a la mochila con su respectivo tipo y movimiento restante
 */
-void aniadir_herramienta_mochila(juego_t* juego, char herramienta){
+void aniadir_herramienta_mochila(personaje_t* personaje, char herramienta){
     if(herramienta == PILA){
-        for(int i = 0; i < juego->personaje.cantidad_elementos; i++){
-            if(juego->personaje.mochila[i].tipo == LINTERNA){
-                juego->personaje.mochila[i].movimientos_restantes = juego->personaje.mochila[i].movimientos_restantes + AGARRAR_PILA;
+        for(int i = 0; i < personaje->cantidad_elementos; i++){
+            if(personaje->mochila[i].tipo == LINTERNA){
+                personaje->mochila[i].movimientos_restantes = personaje->mochila[i].movimientos_restantes + AGARRAR_PILA;
             }
         }
     }else if(herramienta == VELA){
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].tipo = VELA;
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].movimientos_restantes = AGARRAR_VELA;
-        juego->personaje.cantidad_elementos++;
+        personaje->mochila[personaje->cantidad_elementos].tipo = VELA;
+        personaje->mochila[personaje->cantidad_elementos].movimientos_restantes = AGARRAR_VELA;
+        personaje->cantidad_elementos++;
     }else if(herramienta == BENGALA){
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].tipo = BENGALA;
-        juego->personaje.mochila[juego->personaje.cantidad_elementos].movimientos_restantes = AGARRAR_BENGALA;
-        juego->personaje.cantidad_elementos++;
+        personaje->mochila[personaje->cantidad_elementos].tipo = BENGALA;
+        personaje->mochila[personaje->cantidad_elementos].movimientos_restantes = AGARRAR_BENGALA;
+        personaje->cantidad_elementos++;
     }
 }
 /*
-* PRE:
+* PRE: elemento_en_uso debe ser -1 o la posicion de una herramienta
 * POST: Devuelve true si hay una herramienta encendida o false si no hay ninguna encendida
 */
-bool hay_herramienta_encendida(juego_t* juego){
-    if(juego->personaje.elemento_en_uso != HERRAMIENTA_APAGADA){
+bool hay_herramienta_encendida(int elemento_en_uso){
+    if(elemento_en_uso != HERRAMIENTA_APAGADA){
         return true;
     }
     return false;
 }
 /*
-* PRE:
-* POST: Mueve al jugador en la matriz con una herramienta encendida restandole un movimiento y eliminandola si esta se queda sin movimientos
+* PRE: elemento_en_uso debe estar inicializado, elemento_mochila_t debe ser un struct valido
+* POST: Mueve al jugador en el mapa con una herramienta encendida restandole un movimiento y eliminandola si esta se queda sin movimientos
 */
-void moverse_herramienta_encendida(juego_t* juego){
-    if(juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes > 1){
-        juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes = juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes -1;
-    }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes == 1){
-        juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes = juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes - 1;
-        if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo != LINTERNA){
-        juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo = VACIO;
+void moverse_herramienta_encendida(int* elemento_en_uso, elemento_mochila_t mochila[MAX_HERRAMIENTAS]){
+    if(mochila[(*elemento_en_uso)].movimientos_restantes > 1){
+        mochila[(*elemento_en_uso)].movimientos_restantes = mochila[(*elemento_en_uso)].movimientos_restantes -1;
+    }else if(mochila[(*elemento_en_uso)].movimientos_restantes == 1){
+        mochila[(*elemento_en_uso)].movimientos_restantes = mochila[(*elemento_en_uso)].movimientos_restantes - 1;
+        if(mochila[(*elemento_en_uso)].tipo != LINTERNA){
+        mochila[(*elemento_en_uso)].tipo = VACIO;
         }
-        juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
-    }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes <= 0){
-        if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo != LINTERNA){
-        juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo = VACIO;
+        (*elemento_en_uso) = HERRAMIENTA_APAGADA;
+    }else if(mochila[(*elemento_en_uso)].movimientos_restantes <= 0){
+        if(mochila[(*elemento_en_uso)].tipo != LINTERNA){
+        mochila[(*elemento_en_uso)].tipo = VACIO;
         }
-        juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
+        (*elemento_en_uso) = HERRAMIENTA_APAGADA;
     }
 }
 /*
-* PRE:
+* PRE: Jugada tiene que ser una jugada valida y elemento tiene que ser un obstaculo o herramienta, personaje_t debe ser un struct valido
 * POST: Devuelve true si el movimiento que hace el jugador es valido sobre una herramienta o obstaculo
 */
-bool chequear_movimiento(juego_t* juego,char jugada,char elemento,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+bool chequear_movimiento(personaje_t personaje,char jugada,char elemento,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
     if(jugada == ARRIBA){   
-        if(juego->personaje.posicion.fil -1 < MAX_TERRENO_FILA && juego->personaje.posicion.fil-1 >= 0 && terreno[juego->personaje.posicion.fil - 1][juego->personaje.posicion.col] == elemento){
+        if(personaje.posicion.fil -1 < MAX_TERRENO_FILA && personaje.posicion.fil-1 >= 0 && terreno[personaje.posicion.fil - 1][personaje.posicion.col] == elemento){
             return true;
         }
     }else if(jugada == ABAJO){
-        if(juego->personaje.posicion.fil +1 < MAX_TERRENO_FILA && juego->personaje.posicion.fil+1 >= 0 && terreno[juego->personaje.posicion.fil +1][juego->personaje.posicion.col] == elemento){
+        if(personaje.posicion.fil +1 < MAX_TERRENO_FILA && personaje.posicion.fil+1 >= 0 && terreno[personaje.posicion.fil +1][personaje.posicion.col] == elemento){
             return true;
         }
     }else if(jugada == IZQUIERDA){
-        if(juego->personaje.posicion.col -1 < MAX_TERRENO_COLUMNA && juego->personaje.posicion.col-1 >= 0 && terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col -1] == elemento){
+        if(personaje.posicion.col -1 < MAX_TERRENO_COLUMNA && personaje.posicion.col-1 >= 0 && terreno[personaje.posicion.fil][personaje.posicion.col -1] == elemento){
             return true;
         }
     }else if(jugada == DERECHA){
-        if(jugada == DERECHA && juego->personaje.posicion.col + 1 < MAX_TERRENO_COLUMNA && juego->personaje.posicion.col+1 >= 0 && terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col +1] == elemento){
+        if(jugada == DERECHA && personaje.posicion.col + 1 < MAX_TERRENO_COLUMNA && personaje.posicion.col+1 >= 0 && terreno[personaje.posicion.fil][personaje.posicion.col +1] == elemento){
             return true;
         }
     }
     return false;
 }
 /*
-* PRE:
+* PRE: obstaculo debe ser un obstaculo valido, personaje_t debe ser un struct valido
 * POST: Aumenta el tiempo perdido si el jugador choca con un obstaculo o lo mueve de lugar si choca con un koala
 */
-void consecuencia_obstaculo(juego_t* juego, char obstaculo,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+void consecuencia_obstaculo(personaje_t* personaje, char obstaculo,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
     if(obstaculo == ARBOL){
-            if(juego->personaje.tipo == PARDO_OSO){
-                juego->personaje.tiempo_perdido = juego->personaje.tiempo_perdido + CHOCAR_ARBOL_PARDO;
-            } else {
-                juego->personaje.tiempo_perdido = juego->personaje.tiempo_perdido + CHOCAR_ARBOL;
-            }
+        if(personaje->tipo == PARDO_OSO){
+            personaje->tiempo_perdido = personaje->tiempo_perdido + CHOCAR_ARBOL_PARDO;
+        } else {
+            personaje->tiempo_perdido = personaje->tiempo_perdido + CHOCAR_ARBOL;
+        }
     } else if(obstaculo == PIEDRA){
-        if(juego->personaje.tipo != POLAR_OSO){
-            juego->personaje.tiempo_perdido = juego->personaje.tiempo_perdido + CHOCAR_PIEDRA;
+        if(personaje->tipo != POLAR_OSO){
+            personaje->tiempo_perdido = personaje->tiempo_perdido + CHOCAR_PIEDRA;
         }
     } else if(obstaculo == KOALA){
-            juego->personaje.posicion.col = 0;
-            juego->personaje.posicion.fil = rand() % MAX_TERRENO_FILA;
-            terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col] = juego->personaje.tipo;
+        personaje->posicion.col = 0;
+        personaje->posicion.fil = rand() % MAX_TERRENO_FILA;
+        terreno[personaje->posicion.fil][personaje->posicion.col] = personaje->tipo;
     }
 }
 /*
-* PRE:
+* PRE: jugada debe ser una jugada valida, personaje_t debe ser un struct valido
 * POST: Mueve al jugador a la posicion indicada
 */
-void mover_sobre_elemento(juego_t* juego, char jugada){
+void mover_sobre_elemento(personaje_t* personaje, char jugada){
     if(jugada == ARRIBA){
-        juego->personaje.ultimo_movimiento = ARRIBA;
-        juego->personaje.posicion.fil = juego->personaje.posicion.fil - 1;
+        personaje->ultimo_movimiento = ARRIBA;
+        personaje->posicion.fil = personaje->posicion.fil - 1;
     }else if(jugada == ABAJO){
-        juego->personaje.ultimo_movimiento = ABAJO;
-        juego->personaje.posicion.fil = juego->personaje.posicion.fil + 1;
+        personaje->ultimo_movimiento = ABAJO;
+        personaje->posicion.fil = personaje->posicion.fil + 1;
     }else if(jugada == IZQUIERDA){
-        juego->personaje.ultimo_movimiento = IZQUIERDA;
-        juego->personaje.posicion.col = juego->personaje.posicion.col - 1;
+        personaje->ultimo_movimiento = IZQUIERDA;
+        personaje->posicion.col = personaje->posicion.col - 1;
     }else if(jugada == DERECHA){
-        juego->personaje.ultimo_movimiento = DERECHA;
-        juego->personaje.posicion.col = juego->personaje.posicion.col + 1;
+        personaje->ultimo_movimiento = DERECHA;
+        personaje->posicion.col = personaje->posicion.col + 1;
     }
 }
 /*
-* PRE:
+* PRE: jugada debe ser una jugada valida y obstaculo debe ser un obstaculo valido, juego_t debe ser un struct valido
 * POST: Si el jugador choca con un obstaculo lo mueve y devuelve -1 o devuelve 0 si no choco contra ningun obstaculo
 */
 int choco_obstaculo(juego_t* juego,char jugada,char obstaculo,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    if(chequear_movimiento(juego,jugada,obstaculo,terreno) == true){
-        consecuencia_obstaculo(juego,obstaculo, terreno);
+    if(chequear_movimiento(juego->personaje,jugada,obstaculo,terreno) == true){
+        consecuencia_obstaculo(&(juego->personaje),obstaculo, terreno);
         if(obstaculo != KOALA){
-            mover_sobre_elemento(juego,jugada);
+            mover_sobre_elemento(&(juego->personaje),jugada);
         }
-        if(hay_herramienta_encendida(juego) == true){
-            moverse_herramienta_encendida(juego);
+        if(hay_herramienta_encendida(juego->personaje.elemento_en_uso) == true){
+            moverse_herramienta_encendida(&(juego->personaje.elemento_en_uso),juego->personaje.mochila);
         }
         return -1;
     }
     return 0;
 }
 /*
-* PRE:
-* POST: Remueve una herramienta de la matriz si el jugador pasa por encima
+* PRE: cantidad_herramientas debe estar inicializado, jugada debe ser una jugada valida, personaje_t y elemento_del_mapa_t deben ser struct validos
+* POST: Remueve una herramienta del mapa si el jugador pasa por encima
 */
-void remover_herramienta(juego_t* juego, char jugada, char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+void remover_herramienta(elemento_del_mapa_t herramientas[MAX_HERRAMIENTAS],personaje_t personaje,int* cantidad_herramientas, char jugada, char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
     int posicion_a_remover = 0;
 
-    for(int i = 0; i < juego->cantidad_herramientas; i++){
-        if(juego->herramientas[i].posicion.fil == juego->personaje.posicion.fil && juego->herramientas[i].posicion.col == juego->personaje.posicion.col){
+    for(int i = 0; i < (*cantidad_herramientas); i++){
+        if(herramientas[i].posicion.fil == personaje.posicion.fil && herramientas[i].posicion.col == personaje.posicion.col){
             posicion_a_remover = i;
         }
     }
-    juego->herramientas[posicion_a_remover].tipo = juego->herramientas[juego->cantidad_herramientas-1].tipo;
-    juego->herramientas[posicion_a_remover].posicion.fil = juego->herramientas[juego->cantidad_herramientas-1].posicion.fil;
-    juego->herramientas[posicion_a_remover].posicion.col = juego->herramientas[juego->cantidad_herramientas-1].posicion.col;
-    juego->cantidad_herramientas--;
-    terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col] = VACIO; 
+    herramientas[posicion_a_remover].tipo = herramientas[(*cantidad_herramientas)-1].tipo;
+    herramientas[posicion_a_remover].posicion.fil = herramientas[(*cantidad_herramientas)-1].posicion.fil;
+    herramientas[posicion_a_remover].posicion.col = herramientas[(*cantidad_herramientas)-1].posicion.col;
+    (*cantidad_herramientas)--;
+    terreno[personaje.posicion.fil][personaje.posicion.col] = VACIO; 
 
 }
 /*
-* PRE:
+* PRE: jugada debe ser una jugada valida, herramienta debe ser una herramienta valida, juego_t debe ser un struct valido
 * POST: Si el jugador choca con una herramienta lo mueve, añade la herramienta a la mochila, la remueve del mapa y devuelve -1, si no choca con una herramienta devuelve 0
 */
 int choco_herramienta(juego_t* juego,char jugada,char herramienta,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){    
-    if(chequear_movimiento(juego,jugada,herramienta,terreno) == true){
-        aniadir_herramienta_mochila(juego,herramienta);
-        mover_sobre_elemento(juego,jugada);
-        remover_herramienta(juego,jugada,terreno);
-        if(hay_herramienta_encendida(juego) == true){
-            moverse_herramienta_encendida(juego);
+    if(chequear_movimiento(juego->personaje,jugada,herramienta,terreno) == true){
+        aniadir_herramienta_mochila(&(juego->personaje),herramienta);
+        mover_sobre_elemento(&(juego->personaje),jugada);
+        remover_herramienta(juego->herramientas,juego->personaje,&(juego->cantidad_herramientas),jugada,terreno);
+        if(hay_herramienta_encendida(juego->personaje.elemento_en_uso) == true){
+            moverse_herramienta_encendida(&(juego->personaje.elemento_en_uso),juego->personaje.mochila);
         }
         return -1;
     }
     return 0;
 }
 /*
-* PRE:
+* PRE: jugada debe ser una jugada valida, coordenada_t debe ser un struct valido
 * POST: Devuelve true si el movimiento que puede hacer el jugador es valido en una posicion vacia o en la que esta chloe
 */
-bool chequear_movimiento_vacio_chloe(juego_t* juego, char jugada,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+bool chequear_movimiento_vacio_chloe(coordenada_t posicion, char jugada,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
     if(jugada == ARRIBA){   
-        if(juego->personaje.posicion.fil -1 < MAX_TERRENO_FILA && juego->personaje.posicion.fil >= 0 && (terreno[juego->personaje.posicion.fil -1][juego->personaje.posicion.col] == VACIO || terreno[juego->personaje.posicion.fil -1][juego->personaje.posicion.col] == CHLOE)){
+        if(posicion.fil -1 < MAX_TERRENO_FILA && posicion.fil >= 0 && (terreno[posicion.fil -1][posicion.col] == VACIO || terreno[posicion.fil -1][posicion.col] == CHLOE)){
             return true;
         }
     }else if(jugada == ABAJO){
-        if(juego->personaje.posicion.fil +1 < MAX_TERRENO_FILA && juego->personaje.posicion.fil >= 0 && (terreno[juego->personaje.posicion.fil +1][juego->personaje.posicion.col] == VACIO || terreno[juego->personaje.posicion.fil +1][juego->personaje.posicion.col] == CHLOE)){
+        if(posicion.fil +1 < MAX_TERRENO_FILA && posicion.fil >= 0 && (terreno[posicion.fil +1][posicion.col] == VACIO || terreno[posicion.fil +1][posicion.col] == CHLOE)){
             return true;
         }
     }else if(jugada == IZQUIERDA){
-        if(juego->personaje.posicion.col -1 < MAX_TERRENO_COLUMNA && juego->personaje.posicion.col > 0 && (terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col -1 ] == VACIO || terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col -1 ] == CHLOE)){
+        if(posicion.col -1 < MAX_TERRENO_COLUMNA && posicion.col > 0 && (terreno[posicion.fil][posicion.col -1 ] == VACIO || terreno[posicion.fil][posicion.col -1 ] == CHLOE)){
             return true;
         }
     }else if(jugada == DERECHA){
-        if(juego->personaje.posicion.col + 1 < MAX_TERRENO_COLUMNA && juego->personaje.posicion.col >= 0 && (terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col +1] == VACIO || terreno[juego->personaje.posicion.fil][juego->personaje.posicion.col +1] == CHLOE)){
+        if(posicion.col + 1 < MAX_TERRENO_COLUMNA && posicion.col >= 0 && (terreno[posicion.fil][posicion.col +1] == VACIO || terreno[posicion.fil][posicion.col +1] == CHLOE)){
             return true;
         }
     }
     return false;
 }
 /*
-* PRE:
-* POST: Mueve al jugador en la matriz 
+* PRE: jugada debe ser una jugada valida, juego_t debe ser un struct valido
+* POST: Mueve al jugador en el mapa
 */
 void mover_jugador(juego_t* juego, char jugada,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    if(chequear_movimiento_vacio_chloe(juego,jugada,terreno) == true){
-        if(hay_herramienta_encendida(juego) == true){
-            moverse_herramienta_encendida(juego);
+    if(chequear_movimiento_vacio_chloe(juego->personaje.posicion,jugada,terreno) == true){
+        if(hay_herramienta_encendida(juego->personaje.elemento_en_uso) == true){
+            moverse_herramienta_encendida(&(juego->personaje.elemento_en_uso),juego->personaje.mochila);
         }
-        mover_sobre_elemento(juego,jugada);
+        mover_sobre_elemento(&(juego->personaje),jugada);
     } else {
         if(choco_obstaculo(juego,jugada,ARBOL,terreno) == 0){
             if(choco_obstaculo(juego,jugada,PIEDRA,terreno) == 0){
@@ -450,41 +447,43 @@ void mover_jugador(juego_t* juego, char jugada,char terreno[MAX_TERRENO_FILA][MA
     }
 }
 /*
-* PRE:
-* POST: Genera un koala nuevo
+* PRE: cantidad_obstaculos debe estar inicializado, elemento_del_mapa_t debe ser un struct valido
+* POST: Genera un koala nuevo en el mapa
 */
-void generar_koala(juego_t* juego,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+void generar_koala(elemento_del_mapa_t obstaculos[MAX_OBSTACULOS],int* cantidad_obstaculos,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
 
-    int maximo_koalas = juego->cantidad_obstaculos + 1;
+    int maximo_koalas = (*cantidad_obstaculos) + 1;
 
-    while(juego->cantidad_obstaculos < maximo_koalas){
+    while((*cantidad_obstaculos) < maximo_koalas){
         coordenada_t aux;
         aux.fil = rand() % MAX_TERRENO_FILA;
         aux.col = rand() % MAX_TERRENO_COLUMNA;
         if(terreno[aux.fil][aux.col] == VACIO){
-            juego->obstaculos[juego->cantidad_obstaculos].tipo = KOALA;
-            juego->obstaculos[juego->cantidad_obstaculos].visible = false;
-            juego->obstaculos[juego->cantidad_obstaculos].posicion.fil = aux.fil;
-            juego->obstaculos[juego->cantidad_obstaculos].posicion.col = aux.col;
+            obstaculos[(*cantidad_obstaculos)].tipo = KOALA;
+            obstaculos[(*cantidad_obstaculos)].visible = false;
+            obstaculos[(*cantidad_obstaculos)].posicion.fil = aux.fil;
+            obstaculos[(*cantidad_obstaculos)].posicion.col = aux.col;
             terreno[aux.fil][aux.col] = KOALA;
-            juego->cantidad_obstaculos++;
+            (*cantidad_obstaculos)++;
         }
     }
 }
 
 /*
-*
+* PRE: herramienta debe ser una herramienta valida, personaje_t debe ser un struct valido
 * POST: Devuelve la posicion de la herramienta si la encuentra, sino devuelve -1;
 */
-int encontrar_herramienta(juego_t* juego, char herramienta){
+int encontrar_herramienta(personaje_t personaje, char herramienta){
     int posicion_herramienta = -1;
     bool encontre = false;
 
     int i = 0;
-    while(i < juego->personaje.cantidad_elementos && encontre == false){
-        if(juego->personaje.mochila[i].tipo == herramienta){
-            posicion_herramienta = i;
-            encontre = true;
+    while(i < personaje.cantidad_elementos && encontre == false){
+        if(personaje.mochila[i].tipo == herramienta){
+            if(personaje.mochila[i].movimientos_restantes > 0){
+                posicion_herramienta = i;
+                encontre = true;
+            }
         }
         i++; 
     }
@@ -492,66 +491,74 @@ int encontrar_herramienta(juego_t* juego, char herramienta){
     return posicion_herramienta;
 }
 /*
-* PRE:
+* PRE: jugada debe ser una jugada valida, juego_t debe ser un struct valido
 * POST: Si la jugada es una herramienta y hay otra activa cambia la herramienta
 */
 void cambiar_herramienta(juego_t* juego, char jugada,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == LINTERNA){
-        if(jugada == VELA || jugada == BENGALA){
-            if(encontrar_herramienta(juego,jugada) >= 0){
-                juego->personaje.elemento_en_uso = encontrar_herramienta(juego,jugada);
-            }
-            juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
-        }
-    }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == VELA){
-        if(jugada == LINTERNA || jugada == BENGALA){
-            if(encontrar_herramienta(juego,jugada) >= 0){
-                juego->personaje.elemento_en_uso = encontrar_herramienta(juego,jugada);
-            }
-            juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
-            if(jugada == LINTERNA){
-                generar_koala(juego,terreno);           
-            }
-        }
-    }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == BENGALA){
-        if(jugada == LINTERNA || jugada == VELA){
-            juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
-        }
+    int movimientos_bengala = 0;
+
+    if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == BENGALA){
+        juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
+        movimientos_bengala = juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes;
     }
-}
-/*
-* PRE:
-* POST: Si la jugada es una herramienta la enciende o la apaga 
-*/
-void encender_apagar_herramienta(juego_t* juego, char herramienta, int posicion_herramienta,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    if(juego->personaje.elemento_en_uso == HERRAMIENTA_APAGADA && juego->personaje.mochila[posicion_herramienta].movimientos_restantes > 0){
-        juego->personaje.elemento_en_uso = posicion_herramienta;
-        if(herramienta == LINTERNA){
-            generar_koala(juego,terreno);
+    if(movimientos_bengala <= 0){
+        if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == LINTERNA){
+            if(jugada == VELA || jugada == BENGALA){
+                if(encontrar_herramienta(juego->personaje,jugada) >= 0){
+                    juego->personaje.elemento_en_uso = encontrar_herramienta(juego->personaje,jugada);
+                    juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
+                }
+            }
+        }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == VELA){
+            if(jugada == LINTERNA || jugada == BENGALA){
+                if(encontrar_herramienta(juego->personaje,jugada) >= 0){
+                    juego->personaje.elemento_en_uso = encontrar_herramienta(juego->personaje,jugada);
+                    juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes--;
+                    if(jugada == LINTERNA){
+                        generar_koala(juego->obstaculos,&(juego->cantidad_obstaculos),terreno);           
+                    }
+                }
+            }
         }
-        juego->personaje.mochila[posicion_herramienta].movimientos_restantes = juego->personaje.mochila[posicion_herramienta].movimientos_restantes - 1;
-    }else if(juego->personaje.mochila[posicion_herramienta].movimientos_restantes <= 0){
-        juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
-        if(herramienta != LINTERNA){
-            juego->personaje.mochila[posicion_herramienta].tipo = VACIO;
-        }
-        printf("Te agotaste las cargas de esa herramienta!\n");
-    }else if(juego->personaje.elemento_en_uso == posicion_herramienta){
-        if(herramienta == BENGALA){
-            juego->personaje.mochila[posicion_herramienta].movimientos_restantes = juego->personaje.mochila[posicion_herramienta].movimientos_restantes - 1;
-        }else{
-            juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
-        }
-    }
-    
-    if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == BENGALA && juego->personaje.mochila[juego->personaje.elemento_en_uso].movimientos_restantes <= 0){
-        juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo = VACIO;
-        juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
     }
 
 }
 /*
-* PRE:
+* PRE: herramienta debe ser una herramienta valida, juego_t debe ser un struct valido
+* POST: Si la jugada es una herramienta la enciende o la apaga 
+*/
+void encender_apagar_herramienta(juego_t* juego, char herramienta,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
+
+    int posicion_herramienta = 0;
+    char herramienta_encendida;
+
+    if(hay_herramienta_encendida(juego->personaje.elemento_en_uso) == false){
+        posicion_herramienta = encontrar_herramienta((juego->personaje),herramienta);
+        if(posicion_herramienta >= 0){
+            if(juego->personaje.mochila[posicion_herramienta].movimientos_restantes > 0){
+                juego->personaje.elemento_en_uso = posicion_herramienta;
+                juego->personaje.mochila[posicion_herramienta].movimientos_restantes = juego->personaje.mochila[posicion_herramienta].movimientos_restantes -1;
+                if(herramienta == LINTERNA){
+                    generar_koala(juego->obstaculos,&(juego->cantidad_obstaculos),terreno);
+                }
+            }
+        }
+    }else{
+        posicion_herramienta = juego->personaje.elemento_en_uso;
+        herramienta_encendida = juego->personaje.mochila[posicion_herramienta].tipo;
+        if(herramienta == herramienta_encendida){
+            if(herramienta == BENGALA){
+                juego->personaje.mochila[posicion_herramienta].movimientos_restantes = juego->personaje.mochila[posicion_herramienta].movimientos_restantes -1;
+            }else{
+                juego->personaje.elemento_en_uso = HERRAMIENTA_APAGADA;
+            }
+        }else{
+            cambiar_herramienta(juego,herramienta,terreno);
+        }
+    }
+}
+/*
+* PRE: Juego debe ser una estructura valida
 * POST: Hace todos los elementos del mapa invisibles 
 */
 void oscurecer_terreno(juego_t* juego){
@@ -568,7 +575,7 @@ void oscurecer_terreno(juego_t* juego){
     }
 }
 /*
-* PRE:
+* PRE: posicion_jugador y movimiento debe estar inicializado, movimiento debe ser un movimiento valido, juego_t debe ser un struct valido
 * POST: Ilumina los elementos en la fila indicada
 */
 void iluminar_terreno_linterna(juego_t* juego, int posicion_jugador, int movimiento){
@@ -587,11 +594,11 @@ void iluminar_terreno_linterna(juego_t* juego, int posicion_jugador, int movimie
             juego->chloe_visible = true;
         }
     }else if(movimiento == IZQUIERDA || movimiento == DERECHA){
-       for(int i = 0; i < juego->cantidad_herramientas; i++){
-                if(juego->herramientas[i].posicion.col == posicion_jugador && juego->herramientas[i].posicion.fil == juego->personaje.posicion.fil){
-                    juego->herramientas[i].visible = true;
-                }
+        for(int i = 0; i < juego->cantidad_herramientas; i++){
+            if(juego->herramientas[i].posicion.col == posicion_jugador && juego->herramientas[i].posicion.fil == juego->personaje.posicion.fil){
+                juego->herramientas[i].visible = true;
             }
+        }
         for(int j = 0; j < juego->cantidad_obstaculos; j++){
             if(juego->obstaculos[j].posicion.col == posicion_jugador && juego->obstaculos[j].posicion.fil == juego->personaje.posicion.fil){
                 juego->obstaculos[j].visible = true;
@@ -603,7 +610,7 @@ void iluminar_terreno_linterna(juego_t* juego, int posicion_jugador, int movimie
     }
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras válidas
 * POST: Ilumina la fila correcta con la linterna
 */
 void iluminar_linterna(juego_t* juego){
@@ -634,7 +641,7 @@ void iluminar_linterna(juego_t* juego){
     }
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras válidas
 * POST: Ilumina el mapa con la vela
 */
 void iluminar_vela(juego_t* juego){
@@ -660,7 +667,7 @@ void iluminar_vela(juego_t* juego){
     }
 }
 /*
-* PRE:
+* PRE: punto1x,punto1y,punto2x,punto2y deben estar inicializados
 * POST: Calcula la distancia manhattan entre dos puntos y devuelve el resultado
 */
 int distancia_manhattan(int punto1x, int punto1y, int punto2x, int punto2y){
@@ -671,7 +678,7 @@ int distancia_manhattan(int punto1x, int punto1y, int punto2x, int punto2y){
     return resultado;
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras válidas
 * POST: Ilumina el mapa con la bengala
 */
 void iluminar_bengala(juego_t* juego){
@@ -699,14 +706,14 @@ void iluminar_bengala(juego_t* juego){
     }
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras válidas
 * POST: Ilumina el mapa con la herramienta indicada
 */
 void iluminar_herramienta(juego_t* juego,char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
 
     oscurecer_terreno(juego);
 
-    if(hay_herramienta_encendida(juego) == true){
+    if(hay_herramienta_encendida(juego->personaje.elemento_en_uso) == true){
         if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == LINTERNA){
             iluminar_linterna(juego);
         }else if(juego->personaje.mochila[juego->personaje.elemento_en_uso].tipo == VELA){
@@ -717,44 +724,45 @@ void iluminar_herramienta(juego_t* juego,char terreno[MAX_TERRENO_FILA][MAX_TERR
     } 
 }
 /*
-* PRE:
+* PRE: personaje_t debe ser una estructura valida
+* POST: Elimina una herramienta que ya no tiene movimientos restantes
+*/
+void eliminar_herramienta(personaje_t* personaje){
+    if(hay_herramienta_encendida(personaje->elemento_en_uso) == true){
+        if(personaje->mochila[personaje->elemento_en_uso].movimientos_restantes <= 0){
+            if(personaje->mochila[personaje->elemento_en_uso].tipo != LINTERNA){
+                personaje->mochila[personaje->elemento_en_uso].tipo = VACIO;
+            }
+            personaje->elemento_en_uso = HERRAMIENTA_APAGADA;
+        }
+    }
+}   
+/*
+* PRE: Jugada debe estar inicializado, juego_t debe ser un struct valido
 * POST: Enciende o cambia a la herramienta indicada
 */
 void utilizar_herramienta(juego_t* juego, char jugada, char terreno[MAX_TERRENO_FILA][MAX_TERRENO_COLUMNA]){
-    int posicion_herramienta = 0;
-
     if(jugada == LINTERNA){
-        posicion_herramienta = encontrar_herramienta(juego,LINTERNA);
-        if(posicion_herramienta >= 0){
-            encender_apagar_herramienta(juego,LINTERNA,posicion_herramienta,terreno);
-        }
+        encender_apagar_herramienta(juego,LINTERNA,terreno);
     }else if(jugada == VELA){;
-        posicion_herramienta = encontrar_herramienta(juego,VELA);
-        if(posicion_herramienta >= 0){
-            encender_apagar_herramienta(juego,VELA,posicion_herramienta,terreno);
-        }
+        encender_apagar_herramienta(juego,VELA,terreno);
     }else if(jugada == BENGALA){
-        posicion_herramienta = encontrar_herramienta(juego,BENGALA);
-        if(posicion_herramienta >= 0){
-            encender_apagar_herramienta(juego,BENGALA,posicion_herramienta,terreno);
-        };
+        encender_apagar_herramienta(juego,BENGALA,terreno);
     }
 
-    if(hay_herramienta_encendida(juego) == true){
-        cambiar_herramienta(juego,jugada,terreno);
-    }
+    eliminar_herramienta(&(juego->personaje));
 }
 /*
-* PRE:
+* PRE: personaje.tipo debe ser un personaje valido, personaje_t debe ser un struct valido
 * POST: Hace a chloe visible luego de que tiempo perdido sea mayor o igual a 30 si el personaje es panda
 */
-void panda_chloe_visible(juego_t *juego){
-    if(juego->personaje.tipo == PANDA_OSO && juego->personaje.tiempo_perdido >= 30){
-        juego->chloe_visible = true;
+void panda_chloe_visible(personaje_t personaje, bool* chloe_visible){
+    if(personaje.tipo == PANDA_OSO && personaje.tiempo_perdido >= 30){
+        (*chloe_visible)= true;
     } 
 }
 /*
-* PRE:
+* PRE: Recibe una estructura juego y una jugada valida
 * POST: Mueve el personaje en la direccion indicada o habilita cualquiera de las herramientas y actualiza el juego
 */
 void realizar_jugada(juego_t* juego, char jugada){
@@ -764,10 +772,10 @@ void realizar_jugada(juego_t* juego, char jugada){
     utilizar_herramienta(juego,jugada,terreno);
     mover_jugador(juego,jugada,terreno);
     iluminar_herramienta(juego,terreno);
-    panda_chloe_visible(juego);
+    panda_chloe_visible(juego->personaje, &(juego->chloe_visible));
 }
 /*
-* PRE:
+* PRE: Recibe un juego con todas sus estructuras válidas
 * POST: Muestra el juego por pantalla
 */
 void mostrar_juego(juego_t juego){
@@ -776,41 +784,26 @@ void mostrar_juego(juego_t juego){
     
     for(int i = 0; i < MAX_TERRENO_FILA; i++){
         for(int j = 0; j < MAX_TERRENO_COLUMNA;j++){
-            if(juego.personaje.tipo == 'Z'){
-                terreno[i][j] = VACIO;
+            terreno[i][j] = VACIO;
 
-                for(int x = 0; x < juego.cantidad_herramientas; x++){
-                    terreno[juego.herramientas[x].posicion.fil][juego.herramientas[x].posicion.col] = juego.herramientas[x].tipo;
+            for(int x = 0; x < juego.cantidad_obstaculos; x++){
+                if(juego.obstaculos[x].visible == true){
+                    terreno[juego.obstaculos[x].posicion.fil][juego.obstaculos[x].posicion.col] = juego.obstaculos[x].tipo;
                 }
-                for(int y = 0; y < juego.cantidad_obstaculos; y++){
-                    terreno[juego.obstaculos[y].posicion.fil][juego.obstaculos[y].posicion.col] = juego.obstaculos[y].tipo;
-                }
-                terreno[juego.amiga_chloe.fil][juego.amiga_chloe.col] = CHLOE;
-
-                terreno[juego.personaje.posicion.fil][juego.personaje.posicion.col] = juego.personaje.tipo;
-                printf(" %c", terreno[i][j]);
-            }else{
-                terreno[i][j] = VACIO;
-
-                for(int x = 0; x < juego.cantidad_obstaculos; x++){
-                    if(juego.obstaculos[x].visible == true){
-                        terreno[juego.obstaculos[x].posicion.fil][juego.obstaculos[x].posicion.col] = juego.obstaculos[x].tipo;
-                    }
-                }
-
-                for(int y = 0; y < juego.cantidad_herramientas; y++){
-                    if(juego.herramientas[y].visible == true){
-                        terreno[juego.herramientas[y].posicion.fil][juego.herramientas[y].posicion.col] = juego.herramientas[y].tipo;
-                    }
-                }
-
-                if(juego.chloe_visible == true){
-                    terreno[juego.amiga_chloe.fil][juego.amiga_chloe.col] = CHLOE;
-                }
-
-                terreno[juego.personaje.posicion.fil][juego.personaje.posicion.col] = juego.personaje.tipo;
-                printf(" %c",terreno[i][j]);
             }
+
+            for(int y = 0; y < juego.cantidad_herramientas; y++){
+                if(juego.herramientas[y].visible == true){
+                    terreno[juego.herramientas[y].posicion.fil][juego.herramientas[y].posicion.col] = juego.herramientas[y].tipo;
+                }
+            }
+
+            if(juego.chloe_visible == true){
+                terreno[juego.amiga_chloe.fil][juego.amiga_chloe.col] = CHLOE;
+            }
+
+            terreno[juego.personaje.posicion.fil][juego.personaje.posicion.col] = juego.personaje.tipo;
+            printf(" %c",terreno[i][j]);
         }
         printf("\n");
     }

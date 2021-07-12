@@ -35,31 +35,6 @@ int main(){
         if(jugada == TIEMPO){
         printf("Tiempo transcurrido: %i segundos\n", (int)tiempo_actual());
         }
-
-        //PANEL DE CONTROL
-        for(int i = 0; i < juego.personaje.cantidad_elementos; i++){
-            printf("Herramienta: %c, Movimientos restantes: %i\n",juego.personaje.mochila[i].tipo, juego.personaje.mochila[i].movimientos_restantes);
-        }
-        printf("Posicion herramienta en uso %i\n", juego.personaje.elemento_en_uso);
-        printf("Tiempo perdido: %i\n", (int)juego.personaje.tiempo_perdido);
-        printf("Posicion usuario-> X: %i Y: %i\n", juego.personaje.posicion.col, juego.personaje.posicion.fil);
-        printf("Posicion chloe-> X: %i Y: %i\n",juego.amiga_chloe.col, juego.amiga_chloe.fil);
-        for(int i = 0; i < 10; i++){
-            printf("Hay una %c en X: %i Y: %i\n",juego.herramientas[i].tipo,juego.herramientas[i].posicion.col,juego.herramientas[i].posicion.fil);
-        }
-        printf("Ultimo movmiento: %c\n", juego.personaje.ultimo_movimiento);
-        for(int i = 0; i < juego.cantidad_herramientas; i++){
-            if(juego.herramientas[i].visible == true){
-                printf("Esta herramienta tendria que ser visible: %c en x: %i y: %i\n\n",juego.herramientas[i].tipo, juego.herramientas[i].posicion.col, juego.herramientas[i].posicion.fil);
-            }
-        }
-        int koalas = 0;
-        for(int i = 0; i < juego.cantidad_obstaculos; i++){
-            if(juego.obstaculos[i].tipo == 'K'){
-                koalas++;
-            }
-        }
-        printf("Cantidad koalas: %i\n", koalas);
     }
 
     system("clear");

@@ -181,7 +181,10 @@ void mostrar_resultado_test(int puntos,char* personalidad_detectada){
     printf("\n");
     system("clear");
 }
-
+/*
+* PRE: Personalidad_detectada debe estar inicializado
+* POST: Ejecuta el test de personalidad y modifica personalidad_detectada 
+*/
 void test_de_personalidad(char* personalidad_detectada){
 
     char pregunta_tv, pregunta_alimento;
