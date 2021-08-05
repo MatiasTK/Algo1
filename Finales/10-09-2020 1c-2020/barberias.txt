@@ -1,0 +1,6 @@
+Gondolin;Capitán Barba;doble;4
+Gondolin;Pelito pelón;doble;5
+Gondolin;Este no deberia salir;doble;-1
+Gondolin;Tres pelos tiene mi barba;doble;2
+Rivendel;El enano charlatán;doble;3
+Rivendel;Un corte y una quebrada;doble;5

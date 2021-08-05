@@ -13,7 +13,8 @@
 			"test_de_personalidad.h": "c",
 			"stdlib.h": "c",
 			"time.h": "c",
-			"utiles.h": "c"
+			"utiles.h": "c",
+			"string.h": "c"
 		}
 	}
 }
