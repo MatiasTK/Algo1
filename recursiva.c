@@ -24,6 +24,7 @@ int cantidad_comidas_cocinar(comida_t comidas[MAX_COMIDAS],int inicio, int tope,
     return cantidad_comidas;
 }
 
+//INTENTA HACER ESTA PORQ SE VE QUE LES GUSTA MAS
 int alternativa(comida_t comidas[MAX_COMIDAS],int inicio, int tope){
     if(inicio < tope){
         if(comidas[inicio].cantidad_veces_hecha < maximo_veces_hecha){

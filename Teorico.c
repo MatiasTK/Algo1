@@ -17,7 +17,7 @@ _Seleccion:
 
 _Busqueda binaria:
 1-Solo lo utilizo si el archivo esta ordenado
-2-Voy hasta la mitad del vector, si el numero que quiero encontrar esta en la mitad termino ahi sino sigo con el paso 3
+2-Voy hasta la mitad del vector, si el numero que quiero encontrar esta en la mitad termino ahi sino sigo con el paso 3 o 4
 3-Si el numero buscado es mayor a la mitad entonces repito este proceso pero tomando como inicio la mitad + 1
 4-Si el numero buscado es menor a la mitad entonces repito este proceso pero tomando como final la mitad - 1
 5-Repito hasta hallar el numero

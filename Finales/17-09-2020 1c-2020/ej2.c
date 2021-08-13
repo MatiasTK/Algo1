@@ -1,55 +1,59 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_NOMBRE 50
+#define MAX_PALABRA 200
 
-typedef struct desencriptar{
-    char string_buscado[MAX_NOMBRE];
-    char caracter_buscado;
-} desencriptar_t;
-
-int desencriptar(){
-
-    FILE* testamento = fopen("testamento.txt","r");
-
-    FILE* desencriptado = fopen("desencriptado.txt", "w");
-
-    while(!testamento){
-        printf("No se pudo abrir testamento.txt");
-        return -1;
+void desencriptar(){
+    FILE* encriptado = fopen("testamento.txt","r");
+    if(!encriptado){
+        perror("No se pudo abrir testamento.txt");
+        return;
     }
 
-    while(!desencriptado){
-        printf("No se pudo crear desencriptado.txt");
-        fclose(testamento);
-        return -1;
+    FILE* desencriptado = fopen("desencriptado.txt","w");
+    if(!desencriptado){
+        fclose(encriptado);
+        perror("No se pudo crear desencriptado.txt");
+        return;
     }
 
-    desencriptar_t desencriptar;
+    char letra;
+    char palabra_a_remover[MAX_PALABRA]; // Esto deberia recibirlo en la firma de la funcion
+    strcpy(palabra_a_remover,"jeje");
 
-    int leer = fscanf(testamento,"%c",&(desencriptar.caracter_buscado));
+    int leer = fscanf(encriptado,"%c",&letra);
 
-    while(leer != EOF){
-        if(desencriptar.caracter_buscado == 'e'){
-            
-        }else if(desencriptar.caracter_buscado == 's'){
-            fprintf(desencriptado,"a");
-        }else if(desencriptar.caracter_buscado == 'n'){
-            fprintf(desencriptado,"s");
-        }else if(desencriptar.caracter_buscado == 'r'){
-            fprintf(desencriptado,"n");
-        }else if(desencriptar.caracter_buscado == 'a'){
-            fprintf(desencriptado,"r");
+    while(leer == 1){
+        if(letra == 'E'){
+            fprintf(desencriptado,"%c",'E');
+            int logintud_indicada = 0;
+            while(logintud_indicada != strlen(palabra_a_remover)){
+                leer = fscanf(encriptado,"%c",&letra);
+                logintud_indicada++;
+            }
+        }else if(letra == 'e'){
+            fprintf(desencriptado,"%c",'e');
+            int logintud_indicada = 0;
+            while(logintud_indicada != strlen(palabra_a_remover)){
+                leer = fscanf(encriptado,"%c",&letra);
+                logintud_indicada++;
+            }
+        }else if(letra == 's'){
+            fprintf(desencriptado,"%c",'a');
+        }else if(letra == 'n'){
+            fprintf(desencriptado,"%c",'s');
+        }else if(letra == 'r'){
+            fprintf(desencriptado,"%c",'n');
+        }else if(letra == 'a'){
+            fprintf(desencriptado,"%c",'r');
         }else{
-            fprintf(desencriptado,"%c",desencriptar.caracter_buscado);
+            fprintf(desencriptado,"%c",letra);
         }
-
-        leer = fscanf(testamento,"%c",&(desencriptar.caracter_buscado));
+        leer = fscanf(encriptado,"%c",&letra);
     }
 
-
-    fclose(testamento);
     fclose(desencriptado);
+    fclose(encriptado);
 }
 
 int main(){

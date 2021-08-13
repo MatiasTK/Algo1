@@ -28,7 +28,7 @@ void bubble_sort(genero_t vector[MAX_GENEROS],int tope){
 
     for(i = 0; i < tope; i++){
         for(j = 0; j < (tope-i-1); j++){
-            if(vector[j].nombre > vector[j+1].nombre){
+            if(strcmp(vector[j].nombre,vector[j+1].nombre) > 0){
                 aux = vector[j];
                 vector[j] = vector[j+1];
                 vector[j+1] = aux;
@@ -38,7 +38,7 @@ void bubble_sort(genero_t vector[MAX_GENEROS],int tope){
 }
 
 void ordenar_generos(){
-    FILE* generos = fopen("genero.dat","r");
+    FILE* generos = fopen("generos.dat","r");
 
     if(generos == NULL){
         perror("No se pudo abrir generos.dat");
@@ -58,16 +58,45 @@ void ordenar_generos(){
         return;
     }
 
-    fwrite(vector_generos,sizeof(genero_t),1,resultado);
+    fwrite(vector_generos,sizeof(genero_t),tope,resultado);
 
     fclose(resultado);
 
-    remove("generos.dat");
-    rename("generos_final.dat","generos.dat");
+    // remove("generos.dat");
+    // rename("generos_final.dat","generos.dat");
+}
+
+void leer_binario(){
+    FILE* archivo = fopen("generos_final.dat","r");
+    if(archivo == NULL){
+        perror("No se pudo abrir generos_final.dat");
+        return;
+    }
+
+    FILE* texto = fopen("generos_final.csv","w");
+    if(!texto){
+        fclose(archivo);
+        perror("No se pudo crear generos_final.txt");
+        return;
+    }
+
+    genero_t genero;
+
+    size_t leer = fread(&genero,sizeof(genero_t),1,archivo);
+
+    while(leer == 1){
+        fprintf(texto,"%s;%i\n",genero.nombre,genero.id);
+        leer = fread(&genero,sizeof(genero_t),1,archivo);
+    }
+
+    fclose(archivo);
+    fclose(texto);
 }
 
 int main(){
 
+    ordenar_generos();
+    leer_binario();
 
     return 0;
 }

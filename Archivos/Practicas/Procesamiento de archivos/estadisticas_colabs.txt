@@ -1,0 +1,3 @@
+Matias;10
+Juan;5
+Matilda:15

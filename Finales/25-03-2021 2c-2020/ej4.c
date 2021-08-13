@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
                                 // CREO QUE ESTA MAL -> ME HACE MUCHO RUIDO
 #define MAX_CONTRASENIAS 200
 
@@ -11,7 +12,7 @@ void unir_contrasenias(char vector_tom[MAX_CONTRASENIAS],int tope_tom, char vect
     (*tope_final) = 0;
 
     while(i < tope_tom && j < tope_jerry){
-        if(vector_tom[i] <= vector_jerry[j]){
+        if(strcmp(vector_tom[i],vector_jerry[j]) <= 0){
             if(strlen(vector_tom[i]) < 10){
                 vector_final[*tope_final] = vector_tom[i];
                 (*tope_final)++;
